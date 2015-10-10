@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="css/style_2.css" />
+    <title> HTML 5 E CSS - Pós Graduação Unoesc </title>
+  <script type="application/javascript" src="js/cnpj.js"> </script>
+    <script>
+        function vCNPJ(i) {
+            i.setCustomValidity(validaCNPJ(i.value) ? "CNPJ ok" : "CNPJ inválido!");
+        }
+    </script>
+</head>
+
+<body>
+    <form>
+        <label>CNPJ:
+            <input name="cnpj" oninput="vCNPJ(this)" />
+        </label>
+        <input type="submit" value="Enviar" />
+    </form>
+</body>
+
+</html>
