@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <title> HTML 5 E CSS - Pós Graduação Unoesc </title>
+    <meta charset="UTF-8">
+   <!-- <link rel="stylesheet" type="text/css" href="css/style_2.css" /> -->
+</head>
+
+<body>
+    <section>
+        <nav>
+            <ul id="menu-list"  class="menu">
+                <li class="item"> <a href=""> Menu  </a> </li>
+                <li class="item"> <a href=""> Menu  </a> </li>
+                <li class="item" > <a href=""> Menu  </a> </li>
+                <li class="item"> <a href=""> Menu  </a> </li>
+            </ul>
+            <br>
+            <br>
+        </nav>
+    </section>
+    
+    
+    <script>
+        
+        
+        var itens = document.getElementsByClassName("item");
+        console.log(itens);
+        
+        function addItem(valor){
+            
+            document.getElementById("menu-list").innerHTML += '<li>' + valor + '</li>';
+            
+        }
+        
+        
+        addItem("5");
+    
+    </script>
+    
+      <input id="texto1" type="text"  >
+    
+      <input type="button" name="Add"  value="Adicionar" onclick="addItem(texto1.value)"  />
+    
+    
+</body>
+</html>
