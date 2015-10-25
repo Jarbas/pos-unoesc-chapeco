@@ -1,72 +1,141 @@
-var model = require('./model');
-var msg = '';
+var Beer = require("./model.js");
 
-controller = {
+var Controller = {
+  create: function(req, res) {
+    var dados = req.body;
 
-create:function(req, res){
+    var model = new Beer(dados);
 
-var dados = req.body;
+    model.save(function (err, data) {
+      if (err){
+        console.log('Erro: ', err);
+        res.json('Erro: ' + err);
+      }
+      else{
+        console.log('Cerveja Inserida: ', data);
+        res.json(data);
+      }
+    });
+  },
+  retrieve: function(req, res) {
+    var query = {};
+    Beer.find(query, function (err, data) {
+      if (err){
+        console.log('Erro: ', err);
+        res.json('Erro: ' + err);
+      }
+      else{
+        console.log('Cervejas Listadas: ', data);
+        res.json(data);
+      }
+    });
+  },
+  get: function(req, res) {
+    var query = {_id: req.params.id};
+    Beer.findOne(query, function (err, data) {
+      if (err){
+        console.log('Erro: ', err);
+        res.json('Erro: ' + err);
+      }
+      else{
+        console.log('Cervejas Listadas: ', data);
+        res.json(data);
+      }
+    });
+  },
+  update: function(req, res) {
+    var query = {_id: req.params.id};
+    var mod = req.body;
 
-var model = new model(dados);
+    Beer.update(query, mod, function (err, data) {
+      if (err){
+        console.log('Erro: ', err);
+        res.json('Erro: ' + err);
+      }
+      else{
+        console.log('Cervejas alteradas: ', data);
+        res.json(data);
+      }
+    });
+  },
+  delete: function(req, res) {
+    var query = {_id: req.params.id};
 
-model.save( function(err, data) { 
-if (err) { 
-    console.log('Erro:' , err );
+    // É multi: true CUIDADO!
+    Beer.remove(query, function(err, data) {
+      if (err){
+        console.log('Erro: ', err);
+        res.json('Erro: ' + err);
+      }
+      else{
+        console.log('Cervejas deletadas: ', data);
+        res.json(data);
+      }
+    });
+  },
+  renderList: function(req, res) {
 
-} else {
-console.log('Cerveja inserida:', data); 
-msg = data;
+    var query = {};
+    Beer.find(query, function (err, data) {
+      if (err){
+        console.log('Erro: ', err);
+        res.render('beers/error', { error: err });
+      }
+      else{
+        console.log('Cervejas Listadas: ', data);
+        res.render('beers/index', { title: 'Listagem das cervejas',
+                                    beers: data });
+      }
+    });
+  },
+  renderGet: function(req, res) {
 
-}
+    var query = {_id: req.params.id};
+    Beer.findOne(query, function (err, data) {
+      if (err){
+        console.log('Erro: ', err);
+        res.render('beers/error', { error: err });
+      }
+      else{
+        console.log('Cervejas consultada: ', data);
+        res.render('beers/get', { title: 'Cerveja ' + data.name,
+                                    beer: data });
+      }
+    });
+  },
+  renderCreate: function(req, res) {
+    res.render('beers/create', { title: 'Cadastro de Cerveja' });
+  },
+  renderUpdate: function(req, res) {
 
-res.json(msg);    
+    var query = {_id: req.params.id};
+    Beer.findOne(query, function (err, data) {
+      if (err){
+        console.log('Erro: ', err);
+        res.render('beers/error', { error: err });
+      }
+      else{
+        console.log('Cervejas alteradas: ', data);
+        res.render('beers/update', { title: 'Cerveja ' + data.name,
+                                    beer: data });
+      }
+    });
+  },
+  renderRemove: function(req, res) {
 
-} );
+    var query = {_id: req.params.id};
+    Beer.findOne(query, function (err, data) {
+      if (err){
+        console.log('Erro: ', err);
+        res.render('beers/error', { error: err });
+      }
+      else{
+        console.log('Cervejas removidas: ', data);
+        res.render('beers/remove', { title: 'Remover Cerveja ' + data.name,
+                                    beer: data });
+      }
+    });
+  }
+};
 
-},
-    
-update:function(req, res)  {
-    
-var model = mongoose.model('model', BeerSchema),  query ={_id: rep.params.id} ;
-
-var mod = req.mod;
-
-var optional = {  upsert : false, multi : false };
-
-model.update(query, mod, function(err, data) { 
-if (err) { 
-    console.log('Erro:' , err );
-
-} else {
-console.log('Cerveja Autalizada:', data); 
-msg = data;
-}
-res.json(msg);    
-
-} );
-},
-    
- 
-delete:function(req, res) {
-var model = mongoose.model('model', BeerSchema),  query ={name: /Brama/i} ;
-
-model.remove(query, function(err, data) { 
-    
-    if (err) { 
-    console.log('Erro:' , err );
-
-} else {
-console.log('Cerveja excluida', data); 
-msg = data;    
-
-}
-res.json(msg);    
-
-} );
-                  
- }
-
-}    
-    
-
-module.exports = controller;
+module.exports = Controller;
